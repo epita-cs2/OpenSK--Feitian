@@ -426,6 +426,18 @@ The name of the product changes from Feitian to OpenSK
 $ dmesg 
 [ 1526.074997] usb 2-2.2: Product: OpenSK
 ```
+
+## Reset submodules and git repository
+To reset the local directory on your computer, execute the script `reset.sh`.
+Access the OpenSK directory. 
+```shell
+$ ./reset.sh 
+```
+
+## Remove pin code and private keys
+```shell
+$ ./deploy.py --board=nrf52840_dongle_dfu --opensk --programmer=nordicdfu --clear-storage
+```
 ## Troubleshooting
 
 To test whether the installation was successful, visit a
