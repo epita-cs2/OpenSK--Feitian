@@ -341,7 +341,7 @@ an OpenSK device with the correct certificate and private key.
 
 ### Flashing a firmware
 
-#### Makerdiary nRF52840-MDK board
+#### Feitian nRF52840 board
 
 1.  Run our script for compiling/flashing Tock OS and OpenSK on your device
     (_output may differ_):
