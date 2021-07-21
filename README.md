@@ -1,26 +1,18 @@
 # <img alt="OpenSK logo" src="docs/img/OpenSK.svg" width="200px">
 
-![markdownlint](https://github.com/google/OpenSK/workflows/markdownlint/badge.svg?branch=master)
-![pylint](https://github.com/google/OpenSK/workflows/pylint/badge.svg?branch=master)
-![Cargo check](https://github.com/google/OpenSK/workflows/Cargo%20check/badge.svg?branch=master)
-![Cargo format](https://github.com/google/OpenSK/workflows/Cargo%20format/badge.svg?branch=master)
+![markdownlint](https://github.com/google/OpenSK/workflows/markdownlint/badge.svg?branch=stable)
+![pylint](https://github.com/google/OpenSK/workflows/pylint/badge.svg?branch=stable)
+![Cargo check](https://github.com/google/OpenSK/workflows/Cargo%20check/badge.svg?branch=stable)
+![Cargo format](https://github.com/google/OpenSK/workflows/Cargo%20format/badge.svg?branch=stable)
+[![Coverage Status](https://coveralls.io/repos/github/google/OpenSK/badge.svg?branch=stable)](https://coveralls.io/github/google/OpenSK?branch=stable)
 
 ## OpenSK
-
-This repository contains a Rust implementation of a
-[FIDO2](https://fidoalliance.org/fido2/) authenticator.
-
-We developed this as a [Tock OS](https://tockos.org) application and it has been
-successfully tested on the following boards:
-
-*   [Nordic nRF52840-DK](https://www.nordicsemi.com/Software-and-Tools/Development-Kits/nRF52840-DK)
-*   [Nordic nRF52840-dongle](https://www.nordicsemi.com/Software-and-Tools/Development-Kits/nRF52840-Dongle)
+Google has released an open-source implementation called OpenSK. One can install this firmware in an USB key, transforming it into an operational key to implement FIDO or U2F.
 
 ## Disclaimer
+This project is developed by Google, We advice you to constantly keep checking their [original repository](https://github.com/google/OpenSK)  for more updates.
+In this repository we will provide an installation guide of OpenSK on Feitian nRF52840 USB dongle v2.
 
-This project is **proof-of-concept and a research platform**. It is **NOT**
-meant for a daily usage. It's still under development and as such comes with a
-few limitations:
 
 ### FIDO2
 
@@ -37,12 +29,7 @@ is work in progress in the develop branch and is tested less thoroughly.
 
 ### Cryptography
 
-We're currently still in the process on making the
-[ARM&reg; CryptoCell-310](https://developer.arm.com/ip-products/security-ip/cryptocell-300-family)
-embedded in the
-[Nordic nRF52840 chip](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fps_nrf52840%2Fcryptocell.html)
-work to get hardware-accelerated cryptography. In the meantime we implemented
-the required cryptography algorithms (ECDSA, ECC secp256r1, HMAC-SHA256 and
+The required cryptography algorithms (ECDSA, ECC secp256r1, HMAC-SHA256 and
 AES256) in Rust as a placeholder. Those implementations are research-quality
 code and haven't been reviewed. They don't provide constant-time guarantees and
 are not designed to be resistant against side-channel attacks.
@@ -51,42 +38,6 @@ are not designed to be resistant against side-channel attacks.
 
 For a more detailed guide, please refer to our
 [installation guide](docs/install.md).
-
-1.  If you just cloned this repository, run the following script (**Note**: you
-    only need to do this once):
-
-    ```shell
-    ./setup.sh
-    ```
-
-1.  Next step is to install Tock OS as well as the OpenSK application on your
-    board. Run:
-
-    ```shell
-    # Nordic nRF52840-DK board
-    ./deploy.py --board=nrf52840dk --opensk
-    # Nordic nRF52840-Dongle
-    ./deploy.py --board=nrf52840_dongle --opensk
-    ```
-
-1.  Finally you need to inject the cryptographic material if you enabled
-    batch attestation or CTAP1/U2F compatibility (which is the case by
-    default):
-
-    ```shell
-    ./tools/configure.py \
-        --certificate=crypto_data/opensk_cert.pem \
-        --private-key=crypto_data/opensk.key
-    ```
-
-1.  On Linux, you may want to avoid the need for `root` privileges to interact
-    with the key. For that purpose we provide a udev rule file that can be
-    installed with the following command:
-
-    ```shell
-    sudo cp rules.d/55-opensk.rules /etc/udev/rules.d/ &&
-    sudo udevadm control --reload
-    ```
 
 ### Customization
 
@@ -122,16 +73,6 @@ a few things you can personalize:
     https://pages.nist.gov/800-63-3/sp800-63b.html
     You can add relying parties to the list of readers of the minimum PIN length.
 
-### 3D printed enclosure
-
-To protect and carry your key, we partnered with a professional designer and we
-are providing a custom enclosure that can be printed on both professional 3D
-printers and hobbyist models.
-
-All the required files can be downloaded from
-[Thingiverse](https://www.thingiverse.com/thing:4132768) including the STEP
-file, allowing you to easily make the modifications you need to further
-customize it.
 
 ## Development and testing
 
@@ -144,8 +85,8 @@ driver, before faulting the app, you can use the `--panic-console` flag of the
 `deploy.py` script.
 
 ```shell
-# Example on Nordic nRF52840-DK board
-./deploy.py --board=nrf52840dk --opensk --panic-console
+# Example on Feitian nRF52840 board
+./deploy.py --board=nrf52840_dongle_dfu --opensk --panic-console
 ```
 
 ### Debugging memory allocations
@@ -198,6 +139,6 @@ You can control the tool with the following parameters:
 cargo run --manifest-path tools/heapviz/Cargo.toml -- --logfile console.log --fps 50
 ```
 
-## Contributing
+## Reporting a Vulnerability
 
-See [Contributing.md](docs/contributing.md).
+See [SECURITY.md](SECURITY.md).
