@@ -2,7 +2,7 @@
 
 # Installation guide
 
-This document describes in details how to turn a Makerdiary nRF52840 MDK board into a
+This document describes in details how to turn a Feitian nRF52840 board into a
 working FIDO2 security key.
 
 ## Pre-requisite
@@ -11,7 +11,7 @@ working FIDO2 security key.
 
 You will need the following supported board:
 
-*   [Makerdiary nRF52840-MDK USB dongle](https://makerdiary.com/blogs/news/getting-started-with-google-opensk).
+*   [Feitian nRF52840 USB dongle v2](https://feitiantech.github.io/OpenSK_USB/).
 
 
 ### Software
@@ -23,7 +23,7 @@ following:
 *   Install git (can be installed by sudo apt install git)
 *   rustup (can be installed with [Rustup](https://rustup.rs/))
 *   python3 and pip (can be installed with the `python3-pip` package on Debian)
-*   the OpenSSL command line tool (can be installed with the `libssl-dev`
+*   The OpenSSL command line tool (can be installed with the `libssl-dev`
     package on Debian)
 *   [nrfutil](https://pypi.org/project/nrfutil/) (can be installed by `sudo pip3 install nrfutil` or `sudo pip3 install nrfutil --user` )
 
@@ -92,9 +92,9 @@ To configure your current shell, run:
 source $HOME/.cargo/env
 $ source $HOME/ .cargo/env
 ```
-3.  Access OpenSK--Makerdiary repository
+3.  Access OpenSK directory
 ```shell
-$ cd OpenSK--Makerdiary
+$ cd OpenSK
 ```
 4.  Running the setup script
 ```shell
@@ -348,22 +348,53 @@ an OpenSK device with the correct certificate and private key.
     
     During this deployment you don't have to enter to DFU (Bootloader)
     ```shell
-    $ ./deploy.py --board=ncf52840_mdk_dfu --opensk --programmer=none
+    $ ./deploy.py --board=nrf52840_dongle_dfu --opensk --programmer=nordicdfu
     info: Updating rust toolchain to nightly-2020-06-10
     info: syncing channel updates for 'nightly-2020-06-10-x86_64-unknown-linux-gnu'
-    info: checking for self-updates
+    info: checking for elf-updates
     info: component 'rust-std' for target 'thumbv7em-none-eabi' is up to date
     info: Rust toolchain up-to-date
-    info: Building Tock os for board ncf52840_mdk_dfu
+    info: Building Tock os for board nrf52840_dongle_dfu
     info: This is the version for the rustup toolchain manager, not the rustc compiler.
-    info: The currently active 'rustc version is rustc 1.45.0-nightly (fe10f1a49 2020-06-02)
-    Finished release [optimized + debuginfo] target(s) in 0.125
-    info: Building OpenSK application
-    Finished release [optimized] target(s) in 0.12s
+    info: syncing channel updates for 'nightly-2020-06-03-x86_64 - unknown-linux-gnu'
+    info: latest update on 2020-06-03, rust version 1.45.0-nightly (fe10f1a49 2020-06-02)
+    info: downloading component 'cargo'
+    info: downloading component 'clippy'
+    info: downloading component 'rust-docs'
+    info: downloading component 'rust-std'
+    info: downloading component 'rustc'
+    info: downloading component 'rustfmt'
+    info: installing component 'cargo'
+    info: installing component 'clippy
+    info: installing component 'rust-docs'
+    info: installing component 'rust-std'
+    Compiling syn v1.0.73
+    Compiling libc vo.2.97
+    Compiling libtock_core vo.1.0 (/home/epitacs2/Desktop/OpenSK/third_party/libtock-rs/core)
+    Compiling cfg-if v1.0.0
+    Compiling arrayref vo.3.6
+    Compiling cbor v0.1.0 (/home/epitacs2/Desktop/OpenSK/libraries/cbor)
+    Compiling by teorder v1.4.3
+    Compiling subtle v2.4.0
+    Compiling linked_list_allocator v0.8.11
+    Compiling persistent_store vo.1.0 (/home/epitacs2/Desktop/OpenSK/libraries/persistent_store)
+    Compiling quote v1.0.9
+    Compiling getrandom vo.2.3
+    Compiling uuid v0.8.2
+    Compiling libtock_codegen vo.1.0 (/home/epitacs2/Desktop/OpenSK/third_party/libtock-rs/codegen)
+    Compiling ctap2 v1.0.0 (/home/epitacs2/Desktop/OpenSK/)
+    Compiling libtock_drivers vo.1.0 (/home/epitacs2/Desktop/OpenSK/third_party/libtock-drivers)
+    Compiling crypto vo.1.0 (/home/epitacs2/Desktop/OpenSK/libraries/crypto)
+    Compiling lang_items vo.1.0 (/home/epitacs2/Desktop/OpenSK/third_party/lang-items)
+    Finished release (optimized] target(s) in 2m 14s
     info: Generating Tock TAB file for application/example ctap2
-    info: Generating all-merged HEX file: target/ncf52840_mdk_dfu_merged.hex
-    ```
-
+    info: Generating all-merged HEX file: target/nrf52840_dongle_dfu_merged.hex
+    info: Creating DFU package
+    info: Please insert the dongle and switch it to DFU mode by keeping the button pressed while inserting...
+    info: Press [ENTER] when ready.
+    info: Flashing device using DFU...
+    [####################################] 100%
+Device programmed.
 
 
 ### Custom installation
@@ -387,67 +418,16 @@ sudo udevadm control --reload
 
 Then, you will need to unplug and replug the key for the rule to trigger.
 
-## Convert IntelHex file to UF2
-Makerdiary has a UF2 bootloader. By a simple copy of the image file, the USB will be flashed. 
-
-```shell
-$ python3 uf2conv.py '/[path of OpenSK-Makerdiary]/target/nrf52840_mdk_dfu_merged.hex' -C -f OxADA52840
-Converting to uf2, output size: 780288, start address: 0x1000
-Wrote 780288 bytes to flash.uf2.
-$ ls
-flash.uf2 mergehex uf2conv.py
-```
-### Create a directory
-You have to be root in order to execute the below command. 
-```shell
-$ mkdir /mnt/mass_storage
-```
-
-### Access bootloader
-Press and hold the button for 5 seconds, while plugged in. 
-
-### Check your USB partition name
-
-```shell
-$ dmesg
-```
-or 
-
-```shell
-$ lsusb
-```
-
-### Mounting the USB to a directory
-You have to be root in order to execute the below command.
-To know your usb partition name, you have to execute the command.
-
-```shell
-$ mount -t vfat /dev/sdb /mnt/mass_storage/
-```
-
-### Installing the firmware
-You have to be root to execute the below commands.
-```shell
-$ cp [path of the IntelHex image file]/[name of image].uf2 /mnt/mass_storage/
-```
-```shell
-$ lsusb
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 008: ID 1915:521f Nordic Semiconductor ASA VMware Virtual USB Mouse
-Bus 002 Device 003: ID Deof:0002 VMware, Inc. Virtual USB Hub
-Bus 002 Device 002: ID 0eof:0003 VMware, Inc. Virtual Mouse
-Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-```
 
 ## Successfull installation
 
-The name of the product changes from Makerdiary to OpenSK
+The name of the product changes from Feitian to OpenSK
 ```shell
 $ dmesg 
-[ 3313.424703] usb 2-2.1: Product: OpenSK
-[ 3313.424714] usb 2-2.1: Manufacturer: Nordic Semiconductor ASA
-[ 3313.424724] usb 2-2.1: SerialNumber: v1.0
-[ 3313.600069] hid-generic 0003:1915:5217.0002: hiddevo,hidraw1: USB HID v1.10 Device [Nordic Semiconductor ASA OpenSK] on usb-0000:02:00.0-2.1/inputo
+[ 1526.074997] usb 2-2.2: Product: OpenSK
+[ 1526.074998] usb 2-2.2: Manufacturer: Nordic Semiconductor ASA
+[ 1526.075000] usb 2-2.2: SerialNumber: v1.0
+[ 1526.083608] hid-generic 0003:1915:5217.0002: hiddevo,hidraw1: USB HID v1.10 Device [Nordic Semiconductor ASA OpenSK] on usb-0000:02:00.0-2.2/inputo
 ```
 ## Troubleshooting
 
@@ -482,10 +462,10 @@ $ dmesg
 [XXX] hid-generic 0000:0000:0000.0000: hiddev0,hidraw0: USB HID v1.10 Device [Nordic Semiconductor ASA OpenSK] on usb-0000:00:00.0-00/input0
 ```
 
-When plugging in the USB key in bootloader mode (DFU mode), the following line should appear in `lsusb`.
-This indicates that the USB is UF2 bootloader, otherwise would be open DFU. 
+When plugging in the USB key in bootloader mode (DFU mode), the following line should appear in `dmesg`.
+This USB has an open DFU. 
 
 ```shell
-$ lsusb
-Bus 002 Device 006: ID 239a: 0029 Adafruit nRF52840 MDK USB Dongle
+$ dmesg
+[ 1588.909452] usb 2-2.2: Product: Open DFU Bootloader
 ```
