@@ -472,7 +472,7 @@ $ dmesg
 
 ### LED status
 
-| Led Behavior  | Mode Type     | | Led Behavior  | Mode Type     |
+| Led Behavior  | Mode Type     |  Led Behavior  |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
