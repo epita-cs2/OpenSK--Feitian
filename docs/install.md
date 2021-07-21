@@ -452,7 +452,6 @@ understand whether OpenSK was installed properly.
 When plugging in the USB key, the following line should appear in `lsusb`.
 
 ```shell
-...
 $ lsusb
 ...
 Bus XXX Device YYY: ID 1915:521f Nordic Semiconductor ASA OpenSK
