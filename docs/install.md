@@ -471,12 +471,8 @@ $ dmesg
 
 
 ### LED status
-| Led Behavior  |   Mode Type   | | Trigger Method | 
-| ------------- | ------------- | | -------------  | 
-| Content Cell  | Content Cell  | | Content Cell   | 
-| Content Cell  | Content Cell  | | Content Cell   | 
 
-| First Header  | Second Header |
+| Led Behavior  | Mode Type     | | Led Behavior  | Mode Type     |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
