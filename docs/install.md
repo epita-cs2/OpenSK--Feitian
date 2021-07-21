@@ -468,3 +468,14 @@ $ dmesg
 ...
 [ 1588.909452] usb 2-2.2: Product: Open DFU Bootloader
 ```
+
+
+### LED status
+| Led Behavior  |   Mode Type   | | Trigger Method | 
+| ------------- | ------------- | | -------------  | 
+| Content Cell  | Content Cell  | | Content Cell   | 
+| Content Cell  | Content Cell  | | Content Cell   | 
+
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
